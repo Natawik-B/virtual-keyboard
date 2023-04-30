@@ -1,0 +1,142 @@
+.body {
+  height: 100vh;
+}
+
+.keyboard__text-area {
+  display: block;
+  width: 85%;
+  margin: 0 auto;
+  padding: 25px;
+  font-size: 35px;
+  height: calc(100vh - 45vh);
+  min-height: 300px;
+  outline: none;
+}
+
+.keyboard {
+  min-width: 320px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 5px 0;
+  background: #0ee8e8;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  transition: bottom 0.5s;
+}
+
+.keyboard__table-keys {
+  text-align: center;
+}
+
+.keyboard__table-key {
+  height: 6vh;
+  width: 6%;
+  margin: .3%;
+  font-size: 1.5rem;
+  outline: none;
+  background: rgba(86, 16, 191, 0.567);
+  color: #edf901;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  border-radius: 1vh;
+  border: none;
+  box-shadow: .15vw .15vw rgba(216, 60, 180, 0.3);
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.keyboard__table-key:active {
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: none;
+}
+
+.backspace {
+  width: 12%;
+  background: rgba(38, 3, 165, 0.645);
+}
+
+.tab {
+  width: 10%;
+  background: rgba(38, 3, 165, 0.645);
+}
+
+.caps {
+  width: 10%;
+  background: rgba(38, 3, 165, 0.645);
+}
+
+.enter {
+  width: 15%;
+  background: rgba(160, 3, 165, 0.645);
+}
+
+.delete, .shift, .ctrl, .alt, .win {
+  width: 9%;
+  background: rgba(38, 3, 165, 0.645);
+  text-transform: uppercase;
+}
+
+.space {
+  width: 36%;
+  max-width: 500px;
+  background: rgba(160, 3, 165, 0.645);
+  text-transform: uppercase;
+}
+
+.right,
+.left,
+.down {
+  background: rgba(38, 3, 165, 0.645);
+  float: right;
+  margin: 0.7%;
+}
+
+.up {
+  background: rgba(38, 3, 165, 0.645);
+  float: right;
+  margin-right: 8%;
+}
+
+.empty {
+  display: none;
+}
+
+.activatable::after {
+  content: '';
+  top: 10%;
+  right: 10%;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+}
+
+.active::after {
+  background: #15ff00;
+}
+
+.en::after {
+  content: 'EN';
+  top: 15%;
+  right: 23%;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  font-size: 10px;
+}
+
+.ru::after {
+  content: 'RU';
+  top: 15%;
+  right: 23%;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  font-size: 10px;
+}
