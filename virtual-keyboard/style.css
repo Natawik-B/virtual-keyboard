@@ -43,6 +43,10 @@
   margin: 15px auto;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .keyboard__table-key {
   height: 6vh;
   width: 6%;

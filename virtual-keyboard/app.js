@@ -1,5 +1,3 @@
-let input = document.querySelector('.keyboard__table-text');
-
 const Keyboard = {
   elements: {
     main: null,
@@ -42,19 +40,19 @@ const Keyboard = {
     document.body.appendChild(this.elements.main);
 
     this.elements.keysContainer = document.createElement("div");
-    this.elements.keysContainer.classList.add("keyboard__table-keys");
+    this.elements.keysContainer.classList.add("keyboard__table-keys", "hidden");
     this.elements.keysContainer.appendChild(this._createKeys());
     this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__table-key");
     this.elements.main.appendChild(this.elements.keysContainer);
     document.body.appendChild(this.elements.main);
 
-    document.querySelectorAll(".keyboard__table-keys").forEach(element => {
+    let input = document.querySelector(".keyboard__table-text");
+    document.querySelectorAll(".keyboard__table-text").forEach(element => {
       element.addEventListener("focus", () => {
         this.open(element.value, currentValue => {
           element.value = currentValue;
         });
       });
-
       element.addEventListener("click", () => {
         this.properties.start = input.selectionStart;
         this.properties.end = input.selectionEnd;
@@ -74,13 +72,13 @@ const Keyboard = {
         this.properties.end++;
       });
       element.addEventListener("keydown", key => {
-        if (key.which === 37) {
+        if (key.which === 65) {
           this.properties.start--;
           this.properties.end--;
           if (this.properties.start < 0) this.properties.start = 0;
           if (this.properties.end < 0) this.properties.end = 0;
         }
-        if (key.which === 39) {
+        if (key.which === 66) {
           this.properties.start++;
           this.properties.end++;
           if (this.properties.start > this.properties.value.length) this.properties.start = this.properties.value.length;
@@ -91,6 +89,7 @@ const Keyboard = {
   },
 
   _createKeys() {
+    let input = document.querySelector(".keyboard__table-text");
     const nextLine = document.createDocumentFragment();
     const enKey = [
       ["`", "~"],
@@ -200,9 +199,12 @@ const Keyboard = {
           keyElement.classList.add("backspace");
           keyElement.innerHTML = createIconHTML("Backspace");
           keyElement.addEventListener("click", () => {
-            this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1);
+            const index = input.selectionStart;
+            this.properties.value = this.properties.value.substring(0, index - 1) + this.properties.value.substring(index);
             this._triggerEvent("oninput");
             input.focus();
+            input.selectionStart = index - 1;
+            input.selectionEnd = index - 1;
           });
           break;
 
@@ -210,11 +212,25 @@ const Keyboard = {
           keyElement.classList.add("delete");
           keyElement.innerHTML = createIconHTML("Delete");
           keyElement.addEventListener("click", () => {
-            this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1);
+            const index = input.selectionStart;
+            const newValue = input.value.substring(0, index) + input.value.substring(index + 1);
             this._triggerEvent("oninput");
             input.focus();
+            input.value = newValue;
+            input.selectionStart = index;
+            input.selectionEnd = index;
           });
           break;
+
+        case "tab":
+            keyElement.classList.add("tab");
+            keyElement.innerHTML = createIconHTML("Tab");
+            keyElement.addEventListener("click", () => {
+              this.properties.value = this.properties.value + "    ";
+              this._triggerEvent("oninput");
+              input.focus();
+            });
+            break;
 
         case "caps":
           keyElement.classList.add("caps", "activatable");
@@ -244,65 +260,58 @@ const Keyboard = {
           });
           break;
 
-          case "shift":
-            keyElement.classList.add("shift", "activatable");
-            keyElement.textContent = key.toLowerCase();
-            if (this.properties.shift === true) keyElement.classList.toggle("shift");
-            keyElement.addEventListener("click", () => {
-              this.properties.shift = !this.properties.shift;
-              keyElement.classList.toggle("active", this.properties.shift);
-              keyElement.classList.remove("shift", this.properties.shift);
-              keyElement.classList.toggle("shift");
-              input.focus();
-              for (let i = 0; i < keyLayout.length; i++) { //смена регистра букв и символов
-                if (typeof keyLayout[i] !== "string") { //смена символов
-                  keyLayout[i].reverse();
-                  for (const key of this.elements.keys) {
-                    if (key.textContent === keyLayout[i][1]) {
-                      key.textContent = keyLayout[i][0];
-                    }
+        case "shift":
+          keyElement.classList.add("shift", "activatable");
+          keyElement.textContent = key.toLowerCase();
+          if (this.properties.shift === true) keyElement.classList.toggle("shift");
+          keyElement.addEventListener("click", () => {
+            this.properties.shift = !this.properties.shift;
+            keyElement.classList.toggle("active", this.properties.shift);
+            keyElement.classList.remove("shift", this.properties.shift);
+            keyElement.classList.toggle("shift");
+            input.focus();
+            for (let i = 0; i < keyLayout.length; i++) { //смена вида символов
+              if (typeof keyLayout[i] !== "string") {
+                keyLayout[i].reverse();
+                for (const key of this.elements.keys) {
+                  if (key.textContent === keyLayout[i][1]) {
+                    key.textContent = keyLayout[i][0];
                   }
                 }
               }
-              for (const key of this.elements.keys) {
-                if (key.childElementCount === 0 && key.textContent !== "shift") {
-                  if (this.properties.capsLock || this.properties.shift) key.textContent = key.textContent.toUpperCase();
-                  else key.textContent = key.textContent.toLowerCase();
-                  if (this.properties.capsLock && this.properties.shift) key.textContent = key.textContent.toLowerCase();
-                }
+            }
+            document.querySelector(".right").addEventListener("click", (event) => {
+              if (!this.properties.shift) {
+                input.setSelectionRange(this.properties.start = this.properties.end, this.properties.end);
+                input.focus();
+              } else {
+                if (this.properties.direction === "none") this.properties.direction = "forward";
+                if (this.properties.start <= this.properties.end && this.properties.direction === "forward") {
+                  this.properties.end++;
+                  if (this.properties.end > this.properties.value.length) this.properties.end = this.properties.value.length;
+                } else this.properties.start++;
+                if (this.properties.start === this.properties.end) this.properties.direction = "none";
+                input.focus();
+                input.setSelectionRange(this.properties.start, this.properties.end);
               }
-              document.querySelector(".right").addEventListener("click", (event) => {
-                if (!this.properties.shift) {
-                  input.setSelectionRange(this.properties.start = this.properties.end, this.properties.end);
-                  input.focus();
-                } else {
-                  if (this.properties.direction === "none") this.properties.direction = "forward";
-                  if (this.properties.start <= this.properties.end && this.properties.direction === "forward") {
-                    this.properties.end++;
-                    if (this.properties.end > this.properties.value.length) this.properties.end = this.properties.value.length;
-                  } else this.properties.start++;
-                  if (this.properties.start === this.properties.end) this.properties.direction = "none";
-                  input.focus();
-                  input.setSelectionRange(this.properties.start, this.properties.end);
-                }
-              });
-              document.querySelector(".left").addEventListener("click", () => {
-                if (!this.properties.shift) {
-                  input.setSelectionRange(this.properties.start = this.properties.end, this.properties.end);
-                  input.focus();
-                } else {
-                  if (this.properties.direction === "none") this.properties.direction = "backward";
-                  if (this.properties.start <= this.properties.end && this.properties.direction === "backward") {
-                    this.properties.start--;
-                    if (this.properties.start < 0) this.properties.start = 0;
-                  } else this.properties.end--;
-                  if (this.properties.start === this.properties.end) this.properties.direction = "none";
-                  input.focus();
-                  input.setSelectionRange(this.properties.start, this.properties.end);
-                }
-              });
-            })
-            break;
+            });
+            document.querySelector(".left").addEventListener("click", () => {
+              if (!this.properties.shift) {
+                input.setSelectionRange(this.properties.start = this.properties.end, this.properties.end);
+                input.focus();
+              } else {
+                if (this.properties.direction === "none") this.properties.direction = "backward";
+                if (this.properties.start <= this.properties.end && this.properties.direction === "backward") {
+                  this.properties.start--;
+                  if (this.properties.start < 0) this.properties.start = 0;
+                } else this.properties.end--;
+                if (this.properties.start === this.properties.end) this.properties.direction = "none";
+                input.focus();
+                input.setSelectionRange(this.properties.start, this.properties.end);
+              }
+            });
+          })
+          break;
   
         case "space":
           keyElement.classList.add("space");
@@ -468,6 +477,19 @@ const Keyboard = {
 
   },
 
+  open(initialValue, oninput, onclose) {
+    this.properties.value = initialValue || "";
+    this.eventHandlers.oninput = oninput;
+    this.eventHandlers.onclose = onclose;
+    this.elements.keysContainer.classList.remove("hidden");
+  },
+
+  close() {
+    this.properties.value = "";
+    this.eventHandlers.oninput = oninput;
+    this.eventHandlers.onclose = onclose;
+    this.elements.keysContainer.classList.add("hidden");
+  },
 };
 
 window.addEventListener("DOMContentLoaded", function () {
