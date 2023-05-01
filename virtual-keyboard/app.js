@@ -1,8 +1,10 @@
-let input = document.querySelector('.keyboard__text-area');
+let input = document.querySelector('.keyboard__table-text');
 
 const Keyboard = {
   elements: {
     main: null,
+    titleContainer: null,
+    textContainer: null,
     keysContainer: null,
     keys: []
   },
@@ -27,44 +29,51 @@ const Keyboard = {
     this.elements.main = document.createElement("div");
     this.elements.main.classList.add("keyboard");
 
+    this.elements.titleContainer = document.createElement("div");
+    this.elements.titleContainer.classList.add("keyboard__table-title");
+    this.elements.titleContainer.innerHTML = ("RSS Virtual Keyboard");
+    this.elements.main.appendChild(this.elements.titleContainer);
+    document.body.appendChild(this.elements.main);
+
+    this.elements.textContainer = document.createElement("textarea");
+    this.elements.textContainer.classList.add("keyboard__table-text");
+    this.elements.textContainer.placeholder = ("Start ...");
+    this.elements.main.appendChild(this.elements.textContainer);
+    document.body.appendChild(this.elements.main);
+
     this.elements.keysContainer = document.createElement("div");
     this.elements.keysContainer.classList.add("keyboard__table-keys");
     this.elements.keysContainer.appendChild(this._createKeys());
     this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__table-key");
-
     this.elements.main.appendChild(this.elements.keysContainer);
     document.body.appendChild(this.elements.main);
 
-    this.elements.tableArea = document.createElement("div");
-    this.elements.tableArea.classList.add("keyboard__text-area");
-
-    //Auto use keyboard for element with class .keyboard__text-area
-    document.querySelectorAll(".keyboard__text-area").forEach(el => {
-      el.addEventListener("focus", () => {
-        this.open(el.value, currentValue => {
-          el.value = currentValue;
+    document.querySelectorAll(".keyboard__table-keys").forEach(element => {
+      element.addEventListener("focus", () => {
+        this.open(element.value, currentValue => {
+          element.value = currentValue;
         });
       });
 
-      el.addEventListener("click", () => {
+      element.addEventListener("click", () => {
         this.properties.start = input.selectionStart;
         this.properties.end = input.selectionEnd;
       });
-      el.addEventListener("keypress", key => {
+      element.addEventListener("keypress", key => {
         this.properties.value += key.key;
-        this.open(el.value, currentValue => {
-          if (this.properties.start > el.value.length) {
-            el.value += currentValue.substring(currentValue.length - 1, currentValue.length);
+        this.open(element.value, currentValue => {
+          if (this.properties.start > element.value.length) {
+            element.value += currentValue.substring(currentValue.length - 1, currentValue.length);
           } else {
-            el.value = el.value.substring(0, this.properties.start - 1) +
+            element.value = element.value.substring(0, this.properties.start - 1) +
               currentValue.substring(this.properties.start - 1, this.properties.end) +
-              el.value.substring(this.properties.end - 1, el.value.length);
+              element.value.substring(this.properties.end - 1, element.value.length);
           }
         });
         this.properties.start++;
         this.properties.end++;
       });
-      el.addEventListener("keydown", key => {
+      element.addEventListener("keydown", key => {
         if (key.which === 37) {
           this.properties.start--;
           this.properties.end--;

@@ -2,17 +2,6 @@
   height: 100vh;
 }
 
-.keyboard__text-area {
-  display: block;
-  width: 85%;
-  margin: 0 auto;
-  padding: 25px;
-  font-size: 35px;
-  height: calc(100vh - 45vh);
-  min-height: 300px;
-  outline: none;
-}
-
 .keyboard {
   min-width: 320px;
   position: fixed;
@@ -20,21 +9,45 @@
   bottom: 0;
   width: 100%;
   padding: 5px 0;
-  background: #0ee8e8;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   user-select: none;
   transition: bottom 0.5s;
 }
 
-.keyboard__table-keys {
+.keyboard__table-text {
+  display: block;
+  width: 63vw;
+  height: 45vh;
+  min-height: 300px;
+  max-height: 50vh;
+  margin: 0 auto;
+  padding: 25px;
+  font-size: 35px;
+  outline: none;
+  border: 5px solid rgba(160, 3, 165, 0.645);
+  color: rgba(86, 16, 191, 0.864);
+}
+
+.keyboard__table-title {
   text-align: center;
+  font-size: 40px;
+  text-transform: uppercase;
+  color: rgb(13, 13, 214);
+}
+
+.keyboard__table-keys {
+  width: 65vw;
+  max-height: 450px;
+  text-align: center;
+  background: #0ee8e8;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  margin: 15px auto;
 }
 
 .keyboard__table-key {
   height: 6vh;
   width: 6%;
   margin: .3%;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   outline: none;
   background: rgba(86, 16, 191, 0.567);
   color: #edf901;
@@ -51,7 +64,7 @@
 }
 
 .keyboard__table-key:active {
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.571);
   box-shadow: none;
 }
 
@@ -121,6 +134,10 @@
   background: #15ff00;
 }
 
+.lang {
+  background: rgba(160, 3, 165, 0.645);
+}
+
 .en::after {
   content: 'EN';
   top: 15%;
@@ -128,7 +145,7 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .ru::after {
@@ -138,5 +155,5 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  font-size: 10px;
+  font-size: 13px;
 }
