@@ -1,3 +1,5 @@
+let keyLayout;
+
 const Keyboard = {
   elements: {
     main: null,
@@ -125,7 +127,6 @@ const Keyboard = {
       "pgUp",
       "shift",
       "ctrl",
-      "win",
       "alt",
       "space",
       "alt",
@@ -163,7 +164,6 @@ const Keyboard = {
       "pgUp",
       "shift",
       "ctrl",
-      "win",
       "alt",
       "space",
       "alt",
@@ -179,10 +179,18 @@ const Keyboard = {
       return `<i class="material-icons">${icon_name}</i>`;
     };
 
-    let keyLayout;
+    if (this.properties.language) {
+      keyLayout = enKey;
+      keyLayout.value = "Русский язык";
+      localStorage.setItem('language', keyLayout.value);
+      localStorage.setItem('language', keyLayout);
+    } else {
+      keyLayout = ruKey;
+      keyLayout.value = "English";
+      localStorage.setItem('language', keyLayout.value);
+      localStorage.setItem('language', keyLayout);
+    }
 
-    if (this.properties.language) keyLayout = enKey;
-    else keyLayout = ruKey;
     if (this.properties.shift)
       for (let i = 0; i < keyLayout.length; i++)
         if (typeof keyLayout[i] !== "string")
@@ -311,6 +319,24 @@ const Keyboard = {
               }
             });
           })
+            break;
+
+        case "ctrl":
+          keyElement.classList.add("ctrl", "activatable");
+          keyElement.innerHTML = createIconHTML("Ctrl");
+          keyElement.addEventListener("click", () => {
+            keyElement.classList.toggle("active");
+            input.focus();
+          })
+          break;
+
+        case "alt":
+          keyElement.classList.add("alt", "activatable");
+          keyElement.innerHTML = createIconHTML("Alt");
+          keyElement.addEventListener("click", () => {
+            keyElement.classList.toggle("active");
+            input.focus();
+          })
           break;
   
         case "space":
@@ -339,6 +365,9 @@ const Keyboard = {
             while (this.elements.keysContainer.children.length > 0) this.elements.keysContainer.children[0].remove();
             this.elements.keysContainer.appendChild(this._createKeys());
             this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__table-key");
+            keyLayout.value = "English";
+            localStorage.setItem('language', keyLayout.value);
+            localStorage.setItem('language', keyLayout);
           });
           break;
   
@@ -351,6 +380,9 @@ const Keyboard = {
             while (this.elements.keysContainer.children.length > 0) this.elements.keysContainer.children[0].remove();
             this.elements.keysContainer.appendChild(this._createKeys());
             this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__table-key");
+            keyLayout.value = "Русский язык";
+            localStorage.setItem('language', keyLayout.value);
+            localStorage.setItem('language', keyLayout);
           });
           break;
   
@@ -493,5 +525,6 @@ const Keyboard = {
 };
 
 window.addEventListener("DOMContentLoaded", function () {
+  localStorage.getItem('language', keyLayout);
   Keyboard.init();
 });

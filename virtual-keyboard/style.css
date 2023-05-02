@@ -93,7 +93,7 @@
 }
 
 .delete, .shift, .ctrl, .alt, .win {
-  width: 9%;
+  width: 7%;
   background: rgba(38, 3, 165, 0.645);
   text-transform: uppercase;
 }
@@ -110,13 +110,13 @@
 .down {
   background: rgba(38, 3, 165, 0.645);
   float: right;
-  margin: 0.7%;
+  margin: 0.3%;
 }
 
 .up {
   background: rgba(38, 3, 165, 0.645);
   float: right;
-  margin-right: 8%;
+  margin-right: 7%;
 }
 
 .empty {
