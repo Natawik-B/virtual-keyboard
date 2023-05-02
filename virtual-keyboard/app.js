@@ -188,9 +188,11 @@ const Keyboard = {
     if (this.properties.language) {
       keyLayout = enKey;
       keyLayout.value = 'English';
+      Keyboard.properties.language = true;
     } else {
       keyLayout = ruKey;
       keyLayout.value = 'Русский язык';
+      Keyboard.properties.language = '';
     }
 
     if (this.properties.shift) {
@@ -380,7 +382,8 @@ const Keyboard = {
             this.elements.keysContainer.appendChild(this.createKeys());
             this.elements.keys = this.elements.keysContainer.querySelectorAll('.keyboard__table-key');
             localStorage.setItem('language', keyLayout.value);
-            localStorage.setItem('languageKeys', 'ruKey');
+            Keyboard.properties.language = '';
+            localStorage.setItem('languageInit', Keyboard.properties.language);
           });
           break;
 
@@ -396,7 +399,8 @@ const Keyboard = {
             this.elements.keysContainer.appendChild(this.createKeys());
             this.elements.keys = this.elements.keysContainer.querySelectorAll('.keyboard__table-key');
             localStorage.setItem('language', keyLayout.value);
-            localStorage.setItem('languageKeys', 'enKey');
+            Keyboard.properties.language = true;
+            localStorage.setItem('languageInit', Keyboard.properties.language);
           });
           break;
 
@@ -522,9 +526,6 @@ const Keyboard = {
 };
 
 window.addEventListener('DOMContentLoaded', () => {
+  Keyboard.properties.language = localStorage.getItem('languageInit');
   Keyboard.init();
-  localStorage.getItem('language', keyLayout.value);
-  localStorage.getItem('languageKeys', keyLayout);
-  keyLayout.value = `${localStorage.getItem('languageKeys')}`;
-  // console.log(keyLayout.value);
 });
