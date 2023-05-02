@@ -38,7 +38,7 @@ const Keyboard = {
 
     this.elements.textContainer = document.createElement('textarea');
     this.elements.textContainer.classList.add('keyboard__table-text');
-    this.elements.textContainer.placeholder = ('Клавиатура создана в операционной системе Windows.\n\nРеализовано:\n- выделение напечатанного текста shift+left/right\n- замена регистра при зелёном индикаторе capslock\n- замена цифр на символы при зелёном индикаторе shift\n- удаление символов при нажатии delete/backspace\n- красивая кнопочка Lang для переключения языка, тк это экранная клавиатура и зажимать одновременно мышкой пару кнопок не совсем удобно.\n\nНЕ реализовано: \n- нажатие клавиши на физической клаве ВЫДЕЛЯЕТ клавишу на виртуальной клаве');
+    this.elements.textContainer.placeholder = ('Клавиатура создана в операционной системе Windows.\n\nРеализовано:\n- выделение напечатанного текста shift+left/right\n- замена регистра при зелёном индикаторе capslock\n- замена цифр на символы при зелёном индикаторе shift\n- удаление символов при нажатии delete/backspace\n- красивая кнопочка Lang для переключения языка, тк это экранная клавиатура и зажимать одновременно мышкой пару кнопок не совсем удобно.\n\nНЕ реализовано: \n- нажатие клавиши на физической клавиатуре ВЫДЕЛЯЕТ клавишу на виртуальной клавиатуре');
     this.elements.main.appendChild(this.elements.textContainer);
     document.body.appendChild(this.elements.main);
 
