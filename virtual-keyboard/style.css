@@ -3,11 +3,12 @@
 }
 
 .keyboard {
+  width: 100%;
   min-width: 320px;
+  height: 100%;
   position: fixed;
   left: 0;
   bottom: 0;
-  width: 100%;
   padding: 5px 0;
   user-select: none;
   transition: bottom 0.5s;
@@ -16,15 +17,14 @@
 .keyboard__table-text {
   display: block;
   width: 63vw;
-  height: 45vh;
-  min-height: 300px;
-  max-height: 50vh;
+  min-height: 310px;
+  max-height: 35vh;
   margin: 0 auto;
-  padding: 25px;
-  font-size: 35px;
+  padding: 10px;
+  font-size: 20px;
   outline: none;
   border: 5px solid rgba(160, 3, 165, 0.645);
-  color: rgba(86, 16, 191, 0.864);
+  color: black;
 }
 
 .keyboard__table-title {
@@ -36,9 +36,10 @@
 
 .keyboard__table-keys {
   width: 65vw;
-  max-height: 450px;
+  max-height: 460px;
   text-align: center;
   background: #0ee8e8;
+  border: 7px solid rgba(86, 16, 191, 0.567);
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   margin: 15px auto;
 }
@@ -51,7 +52,7 @@
   height: 6vh;
   width: 6%;
   margin: .3%;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   outline: none;
   background: rgba(86, 16, 191, 0.567);
   color: #edf901;
@@ -68,33 +69,44 @@
 }
 
 .keyboard__table-key:active {
-  background: rgba(0, 0, 0, 0.571);
-  box-shadow: none;
+  color: #3498db;
+  background: #ecf90185;
+  box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
+  transition: ease-in-out;
 }
 
 .backspace {
   width: 12%;
   background: rgba(38, 3, 165, 0.645);
+  font-size: 1rem;
 }
 
-.tab {
-  width: 10%;
-  background: rgba(38, 3, 165, 0.645);
-}
-
+.tab,
 .caps {
   width: 10%;
   background: rgba(38, 3, 165, 0.645);
+  font-size: 1rem;
 }
 
 .enter {
   width: 15%;
   background: rgba(160, 3, 165, 0.645);
+  font-size: 1rem;
 }
 
-.delete, .shift, .ctrl, .alt, .win {
+.delete,
+.shift {
   width: 7%;
   background: rgba(38, 3, 165, 0.645);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.ctrl,
+.alt {
+  width: 7%;
+  background: rgba(86, 16, 191, 0.567);
+  font-size: 1rem;
   text-transform: uppercase;
 }
 
@@ -102,6 +114,7 @@
   width: 36%;
   max-width: 500px;
   background: rgba(160, 3, 165, 0.645);
+  font-size: 1rem;
   text-transform: uppercase;
 }
 
@@ -110,12 +123,14 @@
 .down {
   background: rgba(38, 3, 165, 0.645);
   float: right;
+  font-size: 1rem;
   margin: 0.3%;
 }
 
 .up {
   background: rgba(38, 3, 165, 0.645);
   float: right;
+  font-size: 1rem;
   margin-right: 7%;
 }
 
@@ -139,7 +154,9 @@
 }
 
 .lang {
-  background: rgba(160, 3, 165, 0.645);
+  color: rgba(105, 9, 249, 0.922);
+  background: rgba(225, 233, 17, 0.986);
+  font-size: 1rem;
 }
 
 .en::after {
@@ -149,7 +166,7 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  font-size: 13px;
+  font-size: 9px;
 }
 
 .ru::after {
@@ -159,5 +176,30 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  font-size: 13px;
+  font-size: 9px;
+}
+
+@media screen and (max-width: 1100px) {
+
+  .keyboard__table-text {
+    height: 30vh;
+    min-height: 150px;
+    font-size: 1rem;
+  }
+
+  .keyboard__table-key,
+  .ru::after,
+  .en::after {
+    font-size: 12px;
+  }
+
+  .tab, .caps,
+  .backspace, .delete,
+  .enter, .space,
+  .shift, .ctrl, .alt,
+  .lang,
+  .left, .right, .up, .down {
+    font-size: 0.7rem;
+  }
+  
 }

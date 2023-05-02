@@ -1,5 +1,3 @@
-let keyLayout;
-
 const Keyboard = {
   elements: {
     main: null,
@@ -37,7 +35,7 @@ const Keyboard = {
 
     this.elements.textContainer = document.createElement("textarea");
     this.elements.textContainer.classList.add("keyboard__table-text");
-    this.elements.textContainer.placeholder = ("Start ...");
+    this.elements.textContainer.placeholder = ("Клавиатура создана в операционной системе Windows.\n\nРеализовано:\n- выделение напечатанного текста shift+left/right\n- замена регистра при зелёном индикаторе capslock\n- замена цифр на символы при зелёном индикаторе shift\n- удаление символов при нажатии delete/backspace\n- красивая кнопочка \"Lang\" для переключения языка, тк это экранная клавиатура и зажимать одновременно мышкой пару кнопок не совсем удобно.\n\nДля активации экранной клавиатуры нажмите на поле отображения текста.");
     this.elements.main.appendChild(this.elements.textContainer);
     document.body.appendChild(this.elements.main);
 
@@ -181,14 +179,10 @@ const Keyboard = {
 
     if (this.properties.language) {
       keyLayout = enKey;
-      keyLayout.value = "Русский язык";
-      localStorage.setItem('language', keyLayout.value);
-      localStorage.setItem('language', keyLayout);
+      keyLayout.value = "English";
     } else {
       keyLayout = ruKey;
-      keyLayout.value = "English";
-      localStorage.setItem('language', keyLayout.value);
-      localStorage.setItem('language', keyLayout);
+      keyLayout.value = "Русский язык";
     }
 
     if (this.properties.shift)
@@ -243,10 +237,12 @@ const Keyboard = {
         case "caps":
           keyElement.classList.add("caps", "activatable");
           keyElement.innerHTML = createIconHTML("CapsLock");
-          if (this.properties.capsLock === true) keyElement.classList.toggle("shift");
+          if (this.properties.capsLock === true) keyElement.classList.toggle("caps");
           keyElement.addEventListener("click", () => {
             this._functionCapsLock();
             keyElement.classList.toggle("active", this.properties.capsLock);
+            keyElement.classList.remove("caps", this.properties.capsLock);
+            keyElement.classList.toggle("caps");
             input.focus();
           });
           break;
@@ -306,6 +302,7 @@ const Keyboard = {
             document.querySelector(".left").addEventListener("click", () => {
               if (!this.properties.shift) {
                 input.setSelectionRange(this.properties.start = this.properties.end, this.properties.end);
+                input.value -= "←";
                 input.focus();
               } else {
                 if (this.properties.direction === "none") this.properties.direction = "backward";
@@ -322,7 +319,7 @@ const Keyboard = {
             break;
 
         case "ctrl":
-          keyElement.classList.add("ctrl", "activatable");
+          keyElement.classList.add("ctrl"/*, "activatable"*/);
           keyElement.innerHTML = createIconHTML("Ctrl");
           keyElement.addEventListener("click", () => {
             keyElement.classList.toggle("active");
@@ -331,7 +328,7 @@ const Keyboard = {
           break;
 
         case "alt":
-          keyElement.classList.add("alt", "activatable");
+          keyElement.classList.add("alt"/*, "activatable"*/);
           keyElement.innerHTML = createIconHTML("Alt");
           keyElement.addEventListener("click", () => {
             keyElement.classList.toggle("active");
@@ -365,9 +362,6 @@ const Keyboard = {
             while (this.elements.keysContainer.children.length > 0) this.elements.keysContainer.children[0].remove();
             this.elements.keysContainer.appendChild(this._createKeys());
             this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__table-key");
-            keyLayout.value = "English";
-            localStorage.setItem('language', keyLayout.value);
-            localStorage.setItem('language', keyLayout);
           });
           break;
   
@@ -380,9 +374,6 @@ const Keyboard = {
             while (this.elements.keysContainer.children.length > 0) this.elements.keysContainer.children[0].remove();
             this.elements.keysContainer.appendChild(this._createKeys());
             this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__table-key");
-            keyLayout.value = "Русский язык";
-            localStorage.setItem('language', keyLayout.value);
-            localStorage.setItem('language', keyLayout);
           });
           break;
   
@@ -390,12 +381,15 @@ const Keyboard = {
           keyElement.classList.add("left");
           keyElement.innerHTML = createIconHTML("Left");
           keyElement.addEventListener("click", () => {
-            if (!this.properties.shift) {
+            /*if (!this.properties.shift) {
               this.properties.start--;
               this.properties.end--;
               if (this.properties.start < 0) this.properties.start = 0;
               if (this.properties.end < 0) this.properties.end = 0;
               input.setSelectionRange(this.properties.start, this.properties.end);
+            }*/
+            if (!this.properties.shift === true) {
+              input.value += "←";
             }
             input.focus();
           });
@@ -405,12 +399,15 @@ const Keyboard = {
           keyElement.classList.add("right");
           keyElement.innerHTML = createIconHTML("Right");
           keyElement.addEventListener("click", () => {
-            if (!this.properties.shift) {
+            /*if (!this.properties.shift) {
               this.properties.start++;
               this.properties.end++;
               if (this.properties.start > this.properties.value.length) this.properties.start = this.properties.value.length;
               if (this.properties.end > this.properties.value.length) this.properties.end = this.properties.value.length;
               input.setSelectionRange(this.properties.start, this.properties.end);
+            }*/
+            if (!this.properties.shift === true) {
+              input.value += "→";
             }
             input.focus();
           });
@@ -420,14 +417,7 @@ const Keyboard = {
           keyElement.classList.add("up");
           keyElement.innerHTML = createIconHTML("PgUp");
           keyElement.addEventListener("click", () => {
-            if (!this.properties.shift) {
-              this.properties.start--;
-              this.properties.end--;
-  
-              if (this.properties.start < 0) this.properties.start = 0;
-              if (this.properties.end < 0) this.properties.end = 0;
-              input.setSelectionRange(this.properties.start, this.properties.end);
-            }
+            input.value += "↑";
             input.focus();
           });
           break;
@@ -436,13 +426,7 @@ const Keyboard = {
           keyElement.classList.add("down");
           keyElement.innerHTML = createIconHTML("PgDn");
           keyElement.addEventListener("click", () => {
-            if (!this.properties.shift) {
-              this.properties.start--;
-              this.properties.end--;
-              if (this.properties.start < 0) this.properties.start = 0;
-              if (this.properties.end < 0) this.properties.end = 0;
-              input.setSelectionRange(this.properties.start, this.properties.end);
-            }
+            input.value += "↓";
             input.focus();
           });
           break;
@@ -488,7 +472,10 @@ const Keyboard = {
         nextLine.appendChild(document.createElement("br"));
       }
     });
+    localStorage.setItem("language", keyLayout.value);
+    localStorage.setItem("languageKeys", keyLayout);
     return nextLine;
+    
   },
 
   _triggerEvent(handlerName) {
@@ -522,9 +509,9 @@ const Keyboard = {
     this.eventHandlers.onclose = onclose;
     this.elements.keysContainer.classList.add("hidden");
   },
+
 };
 
 window.addEventListener("DOMContentLoaded", function () {
-  localStorage.getItem('language', keyLayout);
   Keyboard.init();
 });
