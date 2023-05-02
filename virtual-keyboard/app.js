@@ -1,5 +1,6 @@
-/* eslint-disable prefer-destructuring */
 let keyLayout;
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-param-reassign */
 const Keyboard = {
   elements: {
     main: null,
@@ -53,7 +54,6 @@ const Keyboard = {
     document.querySelectorAll('.keyboard__table-text').forEach((element) => {
       element.addEventListener('focus', () => {
         this.open(element.value, (currentValue) => {
-          // eslint-disable-next-line no-param-reassign
           element.value = currentValue;
         });
       });
@@ -65,10 +65,8 @@ const Keyboard = {
         this.properties.value += key.key;
         this.open(element.value, (currentValue) => {
           if (this.properties.start > element.value.length) {
-            // eslint-disable-next-line no-param-reassign
             element.value += currentValue.substring(currentValue.length - 1, currentValue.length);
           } else {
-            // eslint-disable-next-line no-param-reassign
             element.value = element.value.substring(0, this.properties.start - 1)
             + currentValue.substring(this.properties.start - 1, this.properties.end)
             + element.value.substring(this.properties.end - 1, element.value.length);
